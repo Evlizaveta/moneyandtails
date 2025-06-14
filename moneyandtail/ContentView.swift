@@ -30,9 +30,9 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView(categories: [
-        Category(id: "1", name: "Продукты", emoji: "🍎", direction: .outcome),
-        Category(id: "2", name: "Зарплата", emoji: "💰", direction: .income)
-    ])
-}
+// #Preview {
+//     ContentView(categories: [
+//         Category(id: "1", name: "Продукты", emoji: "🍎", direction: .outcome),
+//         Category(id: "2", name: "Зарплата", emoji: "💰", direction: .income)
+//     ])
+// }
