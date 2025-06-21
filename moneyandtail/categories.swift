@@ -13,12 +13,12 @@ enum Direction: String, Codable {
 }
 
 struct Category: Identifiable, Codable {
-    let id: String
+    let id: Int
     let name: String
     let emoji: Character
     let direction: Direction
 
-    init(id: String, name: String, emoji: Character, direction: Direction) {
+    init(id: Int, name: String, emoji: Character, direction: Direction) {
         self.id = id
         self.name = name
         self.emoji = emoji
@@ -31,7 +31,7 @@ struct Category: Identifiable, Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(String.self, forKey: .id)
+        id = try container.decode(Int.self, forKey: .id)
         name = try container.decode(String.self, forKey: .title)
         
         let iconString = try container.decode(String.self, forKey: .icon)

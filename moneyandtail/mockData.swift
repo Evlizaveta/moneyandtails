@@ -19,7 +19,7 @@ enum MockData {
     )
 
     static let mockCategory = Category(
-        id: "cat1",
+        id: 2,
         name: "Продукты",
         emoji: "🛒",
         direction: .outcome

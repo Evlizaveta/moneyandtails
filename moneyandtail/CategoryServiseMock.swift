@@ -21,4 +21,6 @@ final class CategoryServiceMock {
     func getOutcomeCategories() async -> [Category] {
         return categories.filter { $0.direction == .outcome }
     }
+    
+    let service = TransactionServiceMock()
 }
