@@ -25,7 +25,7 @@ struct ContentView: View {
                     Text("Доходы")
                 }
             
-            Text("Счёт")
+            AccountScreenView()
                 .tabItem {
                     Image(systemName: "chart.bar.fill")
                         .renderingMode(.template)
