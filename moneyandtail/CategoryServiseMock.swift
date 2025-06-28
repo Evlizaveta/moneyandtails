@@ -8,7 +8,11 @@
 import Foundation
 
 final class CategoryServiceMock {
-    private let categories: [Category] =  [MockData.mockCategory]
+    private let categories: [Category] = [
+        MockData.mockCategoryGroceries,
+        MockData.mockCategorySalary,
+        MockData.mockCategoryCafe  
+    ]
 
     func getAllCategories() async -> [Category] {
         return categories

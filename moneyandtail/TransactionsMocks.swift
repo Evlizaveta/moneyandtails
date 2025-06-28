@@ -28,12 +28,4 @@ final class TransactionServiceMock {
     func deleteTransaction(by id: Int) async {
         transactions.removeAll { $0.id == id }
     }
-    
-//    func getTransactions(from startDate: Date, to endDate: Date, direction: Direction) async -> [Transaction] {
-//        return transactions.filter {
-//            $0.transactionDate >= startDate &&
-//            $0.transactionDate <= endDate &&
-//            $0.categoryId.direction == direction
-//        }
-//    }
 }
