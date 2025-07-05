@@ -19,7 +19,7 @@ final class TransactionsFileCache {
             }
         }
 
-        func remove(by id: String) {
+        func remove(by id: Int) {
             transactions.removeAll { $0.id == id }
         }
 

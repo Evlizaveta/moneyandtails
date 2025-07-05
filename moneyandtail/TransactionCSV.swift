@@ -13,10 +13,10 @@ extension Transaction {
 
         guard components.count >= 8 else { return nil }
 
-        let id = components[0]
+        let id = Int(components[0])!
         let account = Account (
-            id: components[1],
-            userId: "user1",
+            id: Int(components[1])!,
+            userId: 7,
             name: components[2],
             balance: 0,
             currency: "RUB",
@@ -24,7 +24,7 @@ extension Transaction {
             updatedDate: Date()
         )
         let category = Category(
-            id: components[3],
+            id: Int(components[3])!,
             name: components[4],
             emoji: "🛒",
             direction: .outcome

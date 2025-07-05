@@ -9,30 +9,51 @@ import SwiftUI
 
 struct ContentView: View {
     let categories: [Category]
-
     var body: some View {
-        List(categories) { category in
-            let viewModel = CategoryViewModel(category: category)
-
-            HStack {
-               // Text(viewModel.icon)
-                   // .font(.largeTitle)
-                VStack(alignment: .leading) {
-                    Text(viewModel.title)
-                        .font(.headline)
-                    Text(viewModel.isIncome == .income ? "Доход" : "Расход")
-                        .foregroundColor(viewModel.isIncome == .income ? .green : .red)
-                        .font(.subheadline)
+        TabView {
+            TransactionsListView(direction: .outcome)
+                .tabItem {
+                    Image(systemName: "chart.bar.xaxis")
+                        .renderingMode(.template)
+                    Text("Расходы")
                 }
-            }
-            .padding(.vertical, 4)
+            
+            TransactionsListView(direction: .income)
+                .tabItem {
+                    Image(systemName: "chart.bar.xaxis")
+                        .renderingMode(.template)
+                    Text("Доходы")
+                }
+            
+            AccountScreenView()
+                .tabItem {
+                    Image(systemName: "chart.bar.fill")
+                        .renderingMode(.template)
+                    Text("Счёт")
+                }
+            
+            MyArticlesView()
+                .tabItem {
+                    Image(systemName: "lineweight")
+                        .renderingMode(.template)
+                    Text("Статьи")
+                }
+            
+            Text("Настройки")
+                .tabItem {
+                    Image(systemName: "person.crop.circle")
+                        .renderingMode(.template)
+                    Text("Настройки")
+                }
         }
+        .accentColor(Color("AccentColor"))
     }
 }
 
+
 #Preview {
     ContentView(categories: [
-        Category(id: "1", name: "Продукты", emoji: "🍎", direction: .outcome),
-        Category(id: "2", name: "Зарплата", emoji: "💰", direction: .income)
+        Category(id: 1, name: "Продукты", emoji: "🍎", direction: .outcome),
+        Category(id: 2, name: "Зарплата", emoji: "💰", direction: .income)
     ])
 }

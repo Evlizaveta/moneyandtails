@@ -1,8 +1,16 @@
+//
+//  CategoriesViewModel.swift
+//  moneyandtail
+//
+//  Created by Лиза on 05.07.2025.
+//
+
+
 import Foundation
 import SwiftUI
 
 struct CategoryViewModel: Identifiable {
-    let id: String
+    let id: Int
     let title: String
     let icon: Character
     let isIncome: Direction

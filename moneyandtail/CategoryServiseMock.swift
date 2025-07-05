@@ -8,7 +8,11 @@
 import Foundation
 
 final class CategoryServiceMock {
-    private let categories: [Category] =  [MockData.mockCategory]
+    private let categories: [Category] = [
+        MockData.mockCategoryGroceries,
+        MockData.mockCategorySalary,
+        MockData.mockCategoryCafe  
+    ]
 
     func getAllCategories() async -> [Category] {
         return categories
@@ -21,4 +25,6 @@ final class CategoryServiceMock {
     func getOutcomeCategories() async -> [Category] {
         return categories.filter { $0.direction == .outcome }
     }
+    
+    let service = TransactionServiceMock()
 }

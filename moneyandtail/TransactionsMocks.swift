@@ -8,10 +8,11 @@
 import Foundation
 
 final class TransactionServiceMock {
+    static let shared = TransactionServiceMock()
     private var transactions: [Transaction] = MockData.mockTransactions
     
-    func getTransactions(from startDate: Date, to endDate: Date) async -> [Transaction] {
-        return transactions.filter { $0.date >= startDate && $0.date <= endDate }
+    func getTransactions(from startDate: Date, to endDate: Date, direction: Direction) async -> [Transaction] {
+        return transactions.filter { $0.transactionDate >= startDate && $0.transactionDate <= endDate && $0.categoryId.direction == direction}
     }
     
     func createTransaction(_ transaction: Transaction) async {
@@ -24,7 +25,7 @@ final class TransactionServiceMock {
         }
     }
     
-    func deleteTransaction(by id: String) async {
+    func deleteTransaction(by id: Int) async {
         transactions.removeAll { $0.id == id }
     }
 }

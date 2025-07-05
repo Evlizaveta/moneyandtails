@@ -5,7 +5,6 @@
 //  Created by Лиза on 11.06.2025.
 //
 
-// подгружать данные из json, по новой все джсоны загрузить
 
 import SwiftUI
 
@@ -28,8 +27,8 @@ struct MyProjectNameApp: App {
 
     var body: some Scene {
         WindowGroup {
-            let categories = loadCategoriesFromFile()  // [Category]
-            ContentView(categories: categories)       // Передаём [Category], не [CategoryViewModel]
+            let categories = loadCategoriesFromFile()
+            ContentView(categories: categories) 
         }
     }
 }
