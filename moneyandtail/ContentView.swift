@@ -32,7 +32,11 @@ struct ContentView: View {
                     Text("Счёт")
                 }
             
+<<<<<<< HEAD
             MyArticlesView()
+=======
+            Text("Статьи")
+>>>>>>> corrected2
                 .tabItem {
                     Image(systemName: "lineweight")
                         .renderingMode(.template)

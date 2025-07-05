@@ -19,6 +19,7 @@ struct HistoryView: View {
                         Button {
                             presentationMode.wrappedValue.dismiss()
                         } label: {
+<<<<<<< HEAD
                             HStack(spacing: 6) {
                                 Image(systemName: "chevron.left")
                                     .imageScale(.large)
@@ -31,16 +32,31 @@ struct HistoryView: View {
                     .padding(.top, 24)
                     .padding(.horizontal)
                     .padding(.bottom, 12)
+=======
+                            Image(systemName: "chevron.left")
+                                .imageScale(.large)
+                                .padding()
+                        }
+                        Spacer()
+                    }
+>>>>>>> corrected2
                                 Text("Моя история")
                                     .font(.largeTitle).bold()
                                     .padding([.horizontal, .bottom])
                     .padding(.top, 8)
+<<<<<<< HEAD
+=======
+                    .padding(.bottom, 0)
+>>>>>>> corrected2
                     
                     List {
                         Section(header: EmptyView()) {
                             HStack {
                                 Text("Начало")
+<<<<<<< HEAD
                                     .padding(.horizontal, 8)
+=======
+>>>>>>> corrected2
                                 Spacer()
                                 DatePicker(
                                     "", selection: $startDate, in: ...endDate, displayedComponents: .date
@@ -55,7 +71,10 @@ struct HistoryView: View {
                             
                             HStack {
                                 Text("Конец")
+<<<<<<< HEAD
                                     .padding(.horizontal, 8)
+=======
+>>>>>>> corrected2
                                 Spacer()
                                 DatePicker(
                                     "", selection: $endDate, in: startDate...Date(), displayedComponents: .date
@@ -69,7 +88,10 @@ struct HistoryView: View {
                             
                             HStack {
                                 Text("Сумма")
+<<<<<<< HEAD
                                     .padding(.horizontal, 8)
+=======
+>>>>>>> corrected2
                                 Spacer()
                                 Text("\(totalAmount, specifier: "%.0f") ₽")
                                     .font(.system(size: 18))
@@ -81,9 +103,16 @@ struct HistoryView: View {
                         .listRowInsets(EdgeInsets())
                     }
                     .listStyle(.insetGrouped)
+<<<<<<< HEAD
                             .frame(height: 200)
                             .padding(.horizontal, -12)
                             .padding(.top, -42)
+=======
+                            .frame(height: 170)
+                            .padding(.horizontal, 0)
+                            .padding(.top, 0)
+                            .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+>>>>>>> corrected2
                             .scrollContentBackground(.hidden)
                     
                     if transactions.isEmpty {
@@ -96,6 +125,7 @@ struct HistoryView: View {
                     } else {
                         List {
                             Section(header:
+<<<<<<< HEAD
                                         Text("ОПЕРАЦИИ")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
@@ -123,6 +153,32 @@ struct HistoryView: View {
                     }
                 }
                 .padding(.horizontal)
+=======
+                                Text("ОПЕРАЦИИ")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                    .padding(.top, 0)
+                            ) {
+                                ForEach(transactions) { transaction in
+                                    TransactionRow(transaction: transaction)
+                                }
+                            }
+                            .listRowInsets(EdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12))
+                        }
+                        .listRowInsets(EdgeInsets())
+                        .listStyle(.plain)
+                        .listRowBackground(Color.white)
+                        .scrollContentBackground(.hidden)
+                        //.background(Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 18))
+                        .padding(.horizontal, 0)
+                        .padding(.top, 0)
+                        //.frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+                }
+                .padding([.horizontal])
+                .padding(.bottom, 0)
+>>>>>>> corrected2
             }
         }
         .onAppear(perform: loadTransactions)

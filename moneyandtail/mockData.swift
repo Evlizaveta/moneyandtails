@@ -43,7 +43,38 @@ enum MockData {
             categoryId: mockCategoryGroceries,
             amount: 1500,
             transactionDate: Date(),
-            comment: "Продукты",
+            comment: "Купили продукты",
+            createdDate: Date(),
+            updatedDate: Date()
+        ),
+        Transaction(
+            id: 6,
+            accountId: mockAccount,
+            categoryId: mockCategorySalary,
+            amount: 50000,
+            transactionDate: Date(),
+            comment: "Выплата зарплаты",
+            createdDate: Date(),
+            updatedDate: Date()
+        ),
+        Transaction(
+            id: 7,
+            accountId: mockAccount,
+            categoryId: mockCategoryCafe,
+            amount: 450,
+            transactionDate: Date(),
+            comment: "Кофе с коллегами",
+            createdDate: Date(),
+            updatedDate: Date()
+        ),
+        Transaction(
+            id: 8,
+            accountId: mockAccount,
+            categoryId: mockCategoryGroceries,
+            amount: 1200,
+            transactionDate: Date(),
+            //transactionDate: Calendar.current.date(byAdding: .day, value: -10, to: Date())!,
+            comment: "Супермаркет",
             createdDate: Date(),
             updatedDate: Date()
         ),

@@ -20,7 +20,10 @@ struct TransactionsListView: View {
         NavigationStack {
             ZStack(alignment: .bottomTrailing) {
                 VStack(alignment: .leading, spacing: 16) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> corrected2
                     Text(direction == .income ? "Доходы сегодня" : "Расходы сегодня")
                         .font(.system(size: 34, weight: .bold))
                         .padding(.horizontal, 15)
@@ -32,7 +35,10 @@ struct TransactionsListView: View {
                         Text("\(totalAmount, specifier: "%.0f") ₽")
                             .font(.system(size: 18))
                     }
+<<<<<<< HEAD
                     .frame(height: 13)
+=======
+>>>>>>> corrected2
                     .padding()
                     .background(
                         RoundedRectangle(cornerRadius: 10)
@@ -41,6 +47,7 @@ struct TransactionsListView: View {
                     )
                     .padding(.horizontal)
                     
+<<<<<<< HEAD
                     List {
                         Section(header:
                                     Text("ОПЕРАЦИИ")
@@ -60,6 +67,24 @@ struct TransactionsListView: View {
                     .listStyle(.insetGrouped)
                     .padding(.top, -15)
                     .padding(.horizontal, -20)
+=======
+                    Text("ОПЕРАЦИИ")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.init(top: 5, leading: 30, bottom: 0, trailing: 10))
+                    
+                    List {
+                        ForEach(transactions) { transaction in
+                            HStack {
+                                Text(transaction.categoryId.name)
+                                Spacer()
+                                Text("\(NSDecimalNumber(decimal: transaction.amount).doubleValue, specifier: "%.0f") ₽")
+                            }
+                        }
+                    }
+                    .listStyle(.plain)
+                    .padding(.top, -8)
+>>>>>>> corrected2
                     .background(
                         RoundedRectangle(cornerRadius: 10)
                             .foregroundColor(Color(.systemBackground))
@@ -68,7 +93,13 @@ struct TransactionsListView: View {
                     .padding(.horizontal)
                 }
                 
+<<<<<<< HEAD
                 Button(action: { }) {
+=======
+                Button(action: {
+                    //
+                }) {
+>>>>>>> corrected2
                     Circle()
                         .fill(Color("AccentColor"))
                         .frame(width: 56, height: 56)
@@ -88,7 +119,10 @@ struct TransactionsListView: View {
                         showHistory = true
                     } label: {
                         Image(systemName: "clock")
+<<<<<<< HEAD
                             .tint(.purple)
+=======
+>>>>>>> corrected2
                     }
                 }
             }
