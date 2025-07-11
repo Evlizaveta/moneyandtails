@@ -11,11 +11,8 @@
 		6EA3F09A2E0609AF00371F99 /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA3F0992E0609AF00371F99 /* TransactionListView.swift */; };
 		6EA3F09C2E060A2A00371F99 /* MyHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA3F09B2E060A2A00371F99 /* MyHistory.swift */; };
 		6EA3F0A02E0EDC1600371F99 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA3F09F2E0EDC1600371F99 /* Account.swift */; };
-<<<<<<< HEAD
 		6EB55A112E184EEE00ED83B7 /* Articles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB55A102E184ED700ED83B7 /* Articles.swift */; };
 		6EB55A132E18AC7A00ED83B7 /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB55A122E18AC7A00ED83B7 /* CategoriesViewModel.swift */; };
-=======
->>>>>>> corrected2
 		6EFD1E462DFA081E00FA1C2C /* moneyandtailApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EFD1E452DFA081E00FA1C2C /* moneyandtailApp.swift */; };
 		6EFD1E482DFA081E00FA1C2C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EFD1E472DFA081E00FA1C2C /* ContentView.swift */; };
 		6EFD1E4A2DFA082100FA1C2C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EFD1E492DFA082100FA1C2C /* Assets.xcassets */; };
@@ -35,11 +32,8 @@
 		6EA3F0992E0609AF00371F99 /* TransactionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListView.swift; sourceTree = "<group>"; };
 		6EA3F09B2E060A2A00371F99 /* MyHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHistory.swift; sourceTree = "<group>"; };
 		6EA3F09F2E0EDC1600371F99 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
-<<<<<<< HEAD
 		6EB55A102E184ED700ED83B7 /* Articles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Articles.swift; sourceTree = "<group>"; };
 		6EB55A122E18AC7A00ED83B7 /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
-=======
->>>>>>> corrected2
 		6EFD1E422DFA081E00FA1C2C /* moneyandtail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = moneyandtail.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EFD1E452DFA081E00FA1C2C /* moneyandtailApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = moneyandtailApp.swift; sourceTree = "<group>"; };
 		6EFD1E472DFA081E00FA1C2C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -91,11 +85,8 @@
 				6EA3F0992E0609AF00371F99 /* TransactionListView.swift */,
 				6EA3F09F2E0EDC1600371F99 /* Account.swift */,
 				6E3207102DFCE1E5000C3C1C /* mockData.swift */,
-<<<<<<< HEAD
 				6EB55A102E184ED700ED83B7 /* Articles.swift */,
 				6EB55A122E18AC7A00ED83B7 /* CategoriesViewModel.swift */,
-=======
->>>>>>> corrected2
 				6EFD1E652DFC78A100FA1C2C /* TransactionsMocks.swift */,
 				6EFD1E692DFC99C200FA1C2C /* CategoryServiseMock.swift */,
 				6EFD1E672DFC999000FA1C2C /* AccoutServiseMock.swift */,
@@ -197,10 +188,7 @@
 				6EFD1E6C2DFC9AA300FA1C2C /* TransactionCSV.swift in Sources */,
 				6EFD1E642DFC777800FA1C2C /* TransactionsFileCache.swift in Sources */,
 				6EFD1E662DFC78A100FA1C2C /* TransactionsMocks.swift in Sources */,
-<<<<<<< HEAD
 				6EB55A132E18AC7A00ED83B7 /* CategoriesViewModel.swift in Sources */,
-=======
->>>>>>> corrected2
 				6EA3F09A2E0609AF00371F99 /* TransactionListView.swift in Sources */,
 				6EFD1E682DFC999000FA1C2C /* AccoutServiseMock.swift in Sources */,
 				6EFD1E542DFA0A3300FA1C2C /* categories.swift in Sources */,
