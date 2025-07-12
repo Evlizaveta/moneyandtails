@@ -11,14 +11,19 @@ struct ContentView: View {
     let categories: [Category]
     var body: some View {
         TabView {
-            TransactionsListView(direction: .outcome)
+            TransactionsListView(
+                direction: .outcome,
+                availableCategories: categories
+            )
                 .tabItem {
                     Image(systemName: "chart.bar.xaxis")
                         .renderingMode(.template)
                     Text("Расходы")
                 }
             
-            TransactionsListView(direction: .income)
+        TransactionsListView(direction: .income,
+                             availableCategories: categories
+                             )
                 .tabItem {
                     Image(systemName: "chart.bar.xaxis")
                         .renderingMode(.template)
@@ -31,12 +36,7 @@ struct ContentView: View {
                         .renderingMode(.template)
                     Text("Счёт")
                 }
-            
-<<<<<<< HEAD
             MyArticlesView()
-=======
-            Text("Статьи")
->>>>>>> corrected2
                 .tabItem {
                     Image(systemName: "lineweight")
                         .renderingMode(.template)

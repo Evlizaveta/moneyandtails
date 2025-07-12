@@ -89,12 +89,7 @@ struct AccountScreenView: View {
             ZStack {
                 Color(.systemGroupedBackground).ignoresSafeArea()
                 ScrollView {
-<<<<<<< HEAD
-                    
-                VStack(alignment: .leading, spacing: 20) {
-=======
                     VStack(alignment: .leading, spacing: 20) {
->>>>>>> corrected2
                         Text("Мой счет")
                             .font(.largeTitle.bold())
                             .padding(.top, 16)
@@ -215,10 +210,7 @@ struct AccountScreenView: View {
                         Button("Редактировать") {
                             isEditing = true
                         }
-<<<<<<< HEAD
                         .foregroundColor(.purple)
-=======
->>>>>>> corrected2
                     }
                 }
             }

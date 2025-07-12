@@ -80,8 +80,8 @@ struct MyArticlesView: View {
     }
 }
 
-#Preview {
-    NavigationView {
-        MyArticlesView()
-    }
-}
+//#Preview {
+//    NavigationView {
+//        MyArticlesView()
+//    }
+//}
