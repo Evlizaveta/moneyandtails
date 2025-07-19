@@ -7,6 +7,8 @@ enum EditMode {
 
 struct EditTransactionView: View {
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var transactionsVM: TransactionsViewModel
+    
     let mode: EditMode
     let initialTransaction: Transaction?
     let availableCategories: [Category]
@@ -33,6 +35,7 @@ struct EditTransactionView: View {
                 Button(action: { showCategoryPicker = true }) {
                     HStack {
                         Text("Статья")
+                            .foregroundColor(.primary)
                         Spacer()
                         if let category = selectedCategory {
                             Text(category.name).foregroundColor(.primary)
@@ -64,8 +67,12 @@ struct EditTransactionView: View {
                         }
                         .frame(width: 120)
                 }
-                    DatePicker("Дата", selection: $dateOnly, in: ...Date(), displayedComponents: .date)
-                    DatePicker("Время", selection: $timeOnly, displayedComponents: .hourAndMinute)
+                DatePicker("Дата", selection: $dateOnly, in: ...Date(), displayedComponents: .date)
+                DatePicker("Время", selection: $timeOnly, displayedComponents: .hourAndMinute)
+                    .background(
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(Color.accentColor.opacity(0.19))
+                    )
 
                 HStack {
                     Text("Комментарий")
@@ -79,16 +86,19 @@ struct EditTransactionView: View {
                             .multilineTextAlignment(.trailing)
                     }
                 }
-
+                
                 if mode == .edit {
-                        Section {
-                            Button(role: .destructive) {
-                            } label: {
-                                Text("Удалить операцию")
-                                    .frame(maxWidth: .infinity, alignment: .center)
+                    Section {
+                        Button(role: .destructive) {
+                            if let tx = initialTransaction {
+                                onDelete?(tx)
                             }
+                            dismiss()
+                        } label: {
+                            Text("Удалить операцию")
                         }
                     }
+                }
             }
             .navigationTitle(mode == .edit ? "Редактирование" : "Создание")
             .navigationBarTitleDisplayMode(.inline)
@@ -128,15 +138,18 @@ struct EditTransactionView: View {
         let allowedChars = CharacterSet(charactersIn: "0123456789\(decimalSeparator)")
         return String(s.filter { String($0).rangeOfCharacter(from: allowedChars) != nil })
     }
-
+    
     func fillIfEditing() {
         guard mode == .edit, let tx = initialTransaction else { return }
         selectedCategory = tx.categoryId
         amount = NSDecimalNumber(decimal: tx.amount).stringValue
         date = tx.transactionDate
         comment = tx.comment ?? ""
+        dateOnly = Calendar.current.startOfDay(for: tx.transactionDate)
+        let components = Calendar.current.dateComponents([.hour, .minute], from: tx.transactionDate)
+        timeOnly = Calendar.current.date(from: components) ?? Date()
     }
-
+    
     func saveAction() {
         guard let category = selectedCategory, !amount.isEmpty,
               let value = Decimal(string: amount.replacingOccurrences(of: decimalSeparator == "," ? "." : ",", with: decimalSeparator)) else {
@@ -149,7 +162,7 @@ struct EditTransactionView: View {
             accountId: mainAccount,
             categoryId: category,
             amount: value,
-            transactionDate: date,
+            transactionDate: combineDateAndTime(date: dateOnly, time: timeOnly), // Собираем!
             comment: comment.isEmpty ? nil : comment,
             createdDate: initialTransaction?.createdDate ?? Date(),
             updatedDate: Date()
@@ -157,4 +170,14 @@ struct EditTransactionView: View {
         onSave?(tx)
         dismiss()
     }
+    func combineDateAndTime(date: Date, time: Date) -> Date {
+        let cal = Calendar.current
+        var dateComp = cal.dateComponents([.year, .month, .day], from: date)
+        let timeComp = cal.dateComponents([.hour, .minute, .second], from: time)
+        dateComp.hour = timeComp.hour
+        dateComp.minute = timeComp.minute
+        dateComp.second = timeComp.second
+        return cal.date(from: dateComp) ?? date
+    }
+
 }

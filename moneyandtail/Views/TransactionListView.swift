@@ -4,12 +4,15 @@ import SwiftUI
 struct TransactionsListView: View {
     let service = TransactionServiceMock()
     let direction: Direction
+    let availableCategories: [Category]
 
     @State private var transactions: [Transaction] = []
     @State private var showHistory = false
     @State private var showEdit = false
-    @State private var editingTransaction: Transaction? = nil
-    let availableCategories: [Category] 
+    @State private var showCreate = false
+    @State private var editingTransaction: Transaction?
+    
+    @EnvironmentObject var vm: TransactionsViewModel
     let mainAccount = Account(
         id: 6,
         userId: 7,
@@ -21,8 +24,6 @@ struct TransactionsListView: View {
     )
     var onSave: ((Transaction) -> Void)?
     var onDelete: ((Transaction) -> Void)?
-
-    @State private var showCreate = false
     
     private var todayBounds: (start: Date, end: Date) {
             let calendar = Calendar.current
@@ -34,6 +35,9 @@ struct TransactionsListView: View {
 
     var body: some View {
         NavigationStack {
+            if vm.isLoading {
+                            ProgressView()
+                        }
             ZStack(alignment: .bottomTrailing) {
                 VStack(alignment: .leading, spacing: 16) {
                     Text(direction == .income ? "Доходы сегодня" : "Расходы сегодня")
@@ -63,7 +67,7 @@ struct TransactionsListView: View {
                             ForEach(transactions) { transaction in
                                 Button {
                                     editingTransaction = transaction
-                                    showEdit = true
+//                                    showEdit = true
                                 } label: {
                                     HStack {
                                         Text(transaction.categoryId.name)
@@ -95,27 +99,35 @@ struct TransactionsListView: View {
                 .padding(.trailing, 24)
                 .padding(.bottom, 24)
                 
-            
-                
-                .fullScreenCover(isPresented: $showEdit) {
-                    if editingTransaction != nil {
-                        EditTransactionView(
-                            mode: .edit,
-                            initialTransaction: editingTransaction,
-                            availableCategories: availableCategories,
-                            mainAccount: mainAccount,
-                            onSave: { _ in showEdit = false },
-                            onDelete: { _ in showEdit = false }
-                        )
-                    }
+                .fullScreenCover(item: $editingTransaction) { transaction in
+                    EditTransactionView(
+                        mode: .edit,
+                        initialTransaction: transaction,
+                        availableCategories: availableCategories,
+                        mainAccount: mainAccount,
+                        onSave: { updated in
+                                    if let i = transactions.firstIndex(where: { $0.id == updated.id }) {
+                                        transactions[i] = updated
+                                    }
+                                    editingTransaction = nil
+                                },
+                                onDelete: { deleted in
+                                    transactions.removeAll(where: { $0.id == deleted.id })
+                                    editingTransaction = nil
+                                }
+                    )
                 }
+
                 .fullScreenCover(isPresented: $showCreate) {
                     EditTransactionView(
                         mode: .create,
                         initialTransaction: nil,
                         availableCategories: availableCategories,
                         mainAccount: mainAccount,
-                        onSave: { _ in showCreate = false }
+                        onSave: { newTx in
+                                    transactions.append(newTx)
+                                    showCreate = false
+                                }
                     )
                 }
                 .background(Color(.systemGroupedBackground))
@@ -141,6 +153,10 @@ struct TransactionsListView: View {
                 )
                 .onAppear(perform: loadTransactions)
             }
+            .alert(isPresented: Binding(get: { vm.error != nil }, set: { _ in vm.error = nil })) {
+                       Alert(title: Text("Ошибка"), message: Text(vm.error ?? ""), dismissButton: .default(Text("OK")))
+                   }
+                   .task { await vm.loadTransactions() }
         }
     }
     

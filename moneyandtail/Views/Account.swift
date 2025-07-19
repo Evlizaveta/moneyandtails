@@ -19,6 +19,7 @@ struct CurrencyPickerSheet: View {
     let selected: Currency?
     let onSelect: (Currency) -> Void
     let onDismiss: () -> Void
+    @EnvironmentObject var accountVM: AccountsViewModel
 
     var body: some View {
         ZStack {

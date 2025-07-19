@@ -10,25 +10,27 @@ import SwiftUI
 
 @main
 struct MyProjectNameApp: App {
-    func loadCategoriesFromFile() -> [Category] {
-        guard let url = Bundle.main.url(forResource: "response_1749817892008", withExtension: "json") else {
-            print("Файл contents.json не найден")
-            return []
+    @StateObject private var transactionsVM: TransactionsViewModel
+        @StateObject private var accountsVM: AccountsViewModel
+        @StateObject private var categoriesVM: CategoriesViewModel
+
+        init() {
+            let client = NetworkClient(baseURL: AppConfig.baseURL, token: AppConfig.token)
+            let transactionsService = TransactionsService(client: client)
+            let accountsService = AccountsService(client: client)
+            let categoriesService = CategoriesService(client: client)
+
+            _transactionsVM = StateObject(wrappedValue: TransactionsViewModel(service: transactionsService, direction: .income))
+            _accountsVM = StateObject(wrappedValue: AccountsViewModel(service: accountsService))
+            _categoriesVM = StateObject(wrappedValue: CategoriesViewModel(service: categoriesService))
         }
-        do {
-            let data = try Data(contentsOf: url)
-            let categories = try JSONDecoder().decode([Category].self, from: data)
-            return categories
-        } catch {
-            print("Ошибка при чтении JSON: \(error)")
-            return []
-        }
-    }
 
     var body: some Scene {
         WindowGroup {
-            let categories = loadCategoriesFromFile()
-            ContentView(categories: categories) 
+            ContentView()
+                .environmentObject(transactionsVM)
+                .environmentObject(accountsVM)
+                .environmentObject(categoriesVM)
         }
     }
 }

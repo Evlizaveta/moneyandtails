@@ -10,6 +10,7 @@ class AnalyzeViewController: UIViewController {
     private var startDate = Calendar.current.date(byAdding: .month, value: -1, to: Date())!
     private var endDate = Date()
     private var currentSort: SortType = .date
+    @EnvironmentObject var transactionsVM: TransactionsViewModel
     
     enum SortType: Int, CaseIterable { case date, amount
         var title: String { self == .date ? "По дате" : "По сумме" }

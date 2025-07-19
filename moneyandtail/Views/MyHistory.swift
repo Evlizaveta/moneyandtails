@@ -8,6 +8,8 @@ struct HistoryView: View {
     @State private var transactions: [Transaction] = []
     @State private var showAnalyze = false
     
+    @EnvironmentObject var transactionsVM: TransactionsViewModel
+    
     @Binding var isActive: Bool
 
     var body: some View {
