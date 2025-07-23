@@ -193,13 +193,13 @@ struct AnalyzeViewControllerRepresentable: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: AnalyzeViewController, context: Context) {}
 }
 //
-struct HistoryView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            HistoryView(direction: .income, isActive: .constant(true))
-        }
-        NavigationView {
-            HistoryView(direction: .outcome, isActive: .constant(true))
-        }
-    }
-}
+//struct HistoryView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationView {
+//            HistoryView(direction: .income, isActive: .constant(true))
+//        }
+//        NavigationView {
+//            HistoryView(direction: .outcome, isActive: .constant(true))
+//        }
+//    }
+//}

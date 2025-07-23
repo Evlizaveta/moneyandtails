@@ -244,8 +244,8 @@ struct AccountScreenView: View {
     }
 }
 
-struct AccountScreenView_Previews: PreviewProvider {
-    static var previews: some View {
-        AccountScreenView()
-    }
-}
+//struct AccountScreenView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AccountScreenView()
+//    }
+//}
