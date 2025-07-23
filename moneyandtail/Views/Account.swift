@@ -19,6 +19,7 @@ struct CurrencyPickerSheet: View {
     let selected: Currency?
     let onSelect: (Currency) -> Void
     let onDismiss: () -> Void
+    @EnvironmentObject var accountVM: AccountsViewModel
 
     var body: some View {
         ZStack {
@@ -89,12 +90,7 @@ struct AccountScreenView: View {
             ZStack {
                 Color(.systemGroupedBackground).ignoresSafeArea()
                 ScrollView {
-<<<<<<< HEAD
-                    
-                VStack(alignment: .leading, spacing: 20) {
-=======
                     VStack(alignment: .leading, spacing: 20) {
->>>>>>> corrected2
                         Text("Мой счет")
                             .font(.largeTitle.bold())
                             .padding(.top, 16)
@@ -215,10 +211,7 @@ struct AccountScreenView: View {
                         Button("Редактировать") {
                             isEditing = true
                         }
-<<<<<<< HEAD
                         .foregroundColor(.purple)
-=======
->>>>>>> corrected2
                     }
                 }
             }
