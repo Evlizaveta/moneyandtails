@@ -347,7 +347,7 @@ class OperationCell: UITableViewCell {
             leftLabelTopConstraint?.isActive = false
         }
         
-        let amountText = "\(NSDecimalNumber(decimal: amount).doubleValue,) ₽"
+        let amountText = "\(NSDecimalNumber(decimal: amount).doubleValue) ₽"
         amountLabel.text = amountText
         amountLabel.textColor = .darkGray
         
@@ -428,7 +428,7 @@ class SumCell: UITableViewCell {
     required init?(coder: NSCoder) { fatalError() }
     
     func configure(amount: Decimal) {
-        let amountText = "\(NSDecimalNumber(decimal: amount).doubleValue,) ₽"
+        let amountText = "\(NSDecimalNumber(decimal: amount).doubleValue) ₽"
         amountLabel.text = amountText
     }
 }
