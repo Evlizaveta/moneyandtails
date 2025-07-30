@@ -8,57 +8,59 @@
 import SwiftUI
 
 struct ContentView: View {
-    let categories =
-    MockData.mockCategories
-    
+    init() {
+        UITabBar.appearance().backgroundColor = UIColor.white
+    }
+
     var body: some View {
-        TabView {
-            
-            
-            TransactionsListView(
-                direction: .income,
-                availableCategories: categories.filter { $0.direction == .income }
-            )
-            .tabItem {
-                                Image(systemName: "chart.bar.xaxis")
-                                    .renderingMode(.template)
-                                Text("Доходы")
-                            }
-            
-            TransactionsListView(
-                direction: .outcome,
-                availableCategories: categories.filter { $0.direction == .outcome }
-            )
-            .tabItem {
-                                Image(systemName: "chart.bar.xaxis")
-                                    .renderingMode(.template)
-                                Text("Расходы")
-                            }
-            
-            AccountScreenView()
+        ZStack {
+            Color.white.ignoresSafeArea()
+            TabView {
+                TransactionsListView(
+                    direction: .outcome
+                )
                 .tabItem {
-                    Image(systemName: "chart.bar.fill")
+                    Image("Outcome")
                         .renderingMode(.template)
-                    Text("Счёт")
+                    Text("Расходы")
                 }
-            MyArticlesView(categories: categories)
+                
+                TransactionsListView(
+                    direction: .income
+                )
                 .tabItem {
-                    Image(systemName: "lineweight")
-                    Text("Статьи")
-                }
-            
-            Text("Настройки")
-                .tabItem {
-                    Image(systemName: "person.crop.circle")
+                    Image("Income")
                         .renderingMode(.template)
-                    Text("Настройки")
+                    Text("Доходы")
                 }
+                
+                AccountScreenView()
+                    .tabItem {
+                        Image("Account")
+                            .renderingMode(.template)
+                        Text("Счёт")
+                    }
+                
+                MyArticlesView()
+                    .tabItem {
+                        Image("Articles")
+                            .renderingMode(.template)
+                        Text("Статьи")
+                    }
+                
+                Text("Настройки")
+                    .tabItem {
+                        Image("Settings")
+                            .renderingMode(.template)
+                        Text("Настройки")
+                    }
+            }
+            .accentColor(Color("AccentColor"))
         }
-                .accentColor(Color("AccentColor"))
     }
 }
 
 
-#Preview {
-    ContentView()
-}
+//#Preview {
+//    ContentView()
+//}

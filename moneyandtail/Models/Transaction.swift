@@ -7,37 +7,28 @@
 
 import Foundation
 
-struct Transaction: Identifiable, Codable {
+struct Transaction: Identifiable, Decodable {
+    
+    struct Account: Decodable {
+        let id: Int
+    }
+    
+    struct Category: Decodable {
+        let id: Int
+    }
+    
     let id: Int
-    let accountId: Account
-    let categoryId: Category
-    let amount: Decimal
+    let account: Account
+    let category: Category
+    let amount: String
     let transactionDate: Date
     let comment: String?
-    let createdDate: Date
-    let updatedDate: Date
-
-    private enum CodingKeys: String, CodingKey {
-        case id, accountId, categoryId, amount, transactionDate, comment, createdDate, updatedDate
-    }
-}
-
-extension Transaction {
+//    let createdAt: Date
+//    let updatedAt: Date
     
-    static func parse(jsonObject: Any) -> Transaction? {
-        guard let data = try? JSONSerialization.data(withJSONObject: jsonObject) else { return nil }
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        return try? decoder.decode(Transaction.self, from: data)
-    }
-
-    var jsonObject: Any {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
-        guard let data = try? encoder.encode(self),
-              let json = try? JSONSerialization.jsonObject(with: data) else {
-            return [:]
+    var amountDouble: Double { Double(amount) ?? 0 }
+    
+    var amountDecimal: Decimal {
+            Decimal(string: amount) ?? 0
         }
-        return json
-    }
 }

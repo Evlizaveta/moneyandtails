@@ -8,6 +8,8 @@
 import Foundation
 
 struct AppConfig {
-    static let baseURL = URL(string: "https://shmr-finance.ru/swagger")!
+    static let shared = AppConfig()
+    
+    static let baseURL = URL(string: "https://shmr-finance.ru/api/v1")!
     static let token = "CLeoZComaJAdDokJg4XzaYT7"
 }

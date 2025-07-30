@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "NetworkClient.request&lt;[moneyandtail.Account]&gt;(path:method:requestBody:queryItems:):NetworkClient.swift">
+      </ContextState>
+      <ContextState
+         contextName = "TransactionsViewModel.fetchUserTransactions():TransactionsViewModel.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "accountsViewModel.account?.id">
+            </PersistentString>
+            <PersistentString
+               value = "accountsViewModel.account">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TransactionsListView.updateTransactionsState():TransactionListView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "transactionsViewModel.isLoading">
+            </PersistentString>
+            <PersistentString
+               value = "transactionsViewModel.transactions">
+            </PersistentString>
+            <PersistentString
+               value = "accountsViewModel.account">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
