@@ -1,59 +1,97 @@
+import Combine
 import Foundation
 
 @MainActor
 final class TransactionsViewModel: ObservableObject {
+    
     @Published var transactions: [Transaction] = []
     @Published var isLoading = false
-    @Published var error: String? = nil
-    @Published var editingTransaction: Transaction? = nil
-    @Published var showCreate = false
+    @Published var errorMessage: String?
+    
+    private let service: TransactionsService
+    private let accountsViewModel: AccountsViewModel
+    
+    private var subscriptions: [AnyCancellable] = []
+    
+    deinit {
+        subscriptions.forEach({ $0.cancel() })
+        subscriptions.removeAll()
+    }
 
-    let service: TransactionsService
-    let direction: Direction   // хранит доходы/расходы
-    
-    init(service: TransactionsService, direction: Direction) {
+    init(service: TransactionsService, accountsViewModel: AccountsViewModel) {
         self.service = service
-        self.direction = direction
-    }
-    
-    func loadTransactions() async {
-        isLoading = true; defer { isLoading = false }
-        do {
-            transactions = try await service.fetchTransactions(for: direction)
-        } catch {
-            self.error = error.localizedDescription
-        }
-    }
-    
-    func addTransaction(_ tx: Transaction) async {
-        isLoading = true; defer { isLoading = false }
-        do {
-            let newTx = try await service.addTransaction(tx)
-            transactions.append(newTx)
-        } catch {
-            self.error = error.localizedDescription
-        }
-    }
-    
-    func updateTransaction(_ tx: Transaction) async {
-        isLoading = true; defer { isLoading = false }
-        do {
-            let result = try await service.updateTransaction(tx)
-            if let idx = transactions.firstIndex(where: { $0.id == result.id }) {
-                transactions[idx] = result
+        self.accountsViewModel = accountsViewModel
+        
+        let accountSubs = accountsViewModel.$account.sink { [weak self] _ in
+            Task {
+                await self?.fetchUserTransactions()
             }
+        }
+        subscriptions.append(accountSubs)
+    }
+    
+    func fetchUserTransactions() async {
+        guard let id = accountsViewModel.account?.id else { return }
+        isLoading = true
+        do {
+            let transactions = try await service.fetchAllTransactions(accountId: id)
+            self.transactions = transactions ?? []
+            isLoading = false
+            errorMessage = nil
         } catch {
-            self.error = error.localizedDescription
+            isLoading = false
+            errorMessage = error.localizedDescription
         }
     }
     
-    func deleteTransaction(_ tx: Transaction) async {
-        isLoading = true; defer { isLoading = false }
+    func deleteTransaction(_ transactionId: Int) async {
+        try? await service.deleteTransaction(transactionId)
+        await fetchUserTransactions()
+    }
+    
+    func addTransaction(
+        accountId: Int,
+        categoryId: Int,
+        amount: String,
+        transactionDate: Date,
+        comment: String?
+    ) async -> Bool {
         do {
-            try await service.deleteTransaction(tx)
-            transactions.removeAll { $0.id == tx.id }
+            try await service.addTransaction(
+                accountId: accountId,
+                categoryId: categoryId,
+                amount: amount,
+                transactionDate: transactionDate,
+                comment: comment
+            )
+            await fetchUserTransactions()
+            return true
         } catch {
-            self.error = error.localizedDescription
+            return false
+        }
+    }
+    
+    func editTransaction(
+        transactionId: Int,
+        accountId: Int,
+        categoryId: Int,
+        amount: String,
+        transactionDate: Date,
+        comment: String?
+    ) async -> Bool {
+        do {
+            try await service.editTransaction(
+                transactionId: transactionId,
+                accountId: accountId,
+                categoryId: categoryId,
+                amount: amount,
+                transactionDate: transactionDate,
+                comment: comment
+            )
+            await fetchUserTransactions()
+            return true
+        } catch {
+            return false
         }
     }
 }
