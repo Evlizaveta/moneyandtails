@@ -2,32 +2,55 @@ import Foundation
 
 @MainActor
 final class AccountsViewModel: ObservableObject {
-    @Published var mainAccount: Account?
-    @Published var accounts: [Account] = []
-    @Published var isLoading = false
-    @Published var error: String?
-
-    let service: AccountsService
-
+    
+    @Published var account: Account?
+    @Published var errorMessage: String?
+    var isLoading = false
+    
+    private let service: AccountsService
+    
     init(service: AccountsService) {
         self.service = service
     }
-
-    func loadMainAccount() async {
-        isLoading = true; defer { isLoading = false }
+    
+    func reloadMainAccount() async {
+        isLoading = true
         do {
-            mainAccount = try await service.fetchMainAccount()
+            account = try await service.fetchAllAccounts().first
+            isLoading = false
+            errorMessage = nil
         } catch {
-            self.error = error.localizedDescription
+            isLoading = false
+            errorMessage = error.localizedDescription
         }
     }
-
-    func loadAllAccounts() async {
-        isLoading = true; defer { isLoading = false }
+    
+    func updateAccount(
+        accountId: Int,
+        name: String,
+        balance: String,
+        currency: String
+    ) async -> Bool {
         do {
-            accounts = try await service.fetchAllAccounts()
+            try await service.updateAccount(
+                accountId: accountId,
+                name: name,
+                balance: balance,
+                currency: currency
+            )
+            await reloadMainAccount()
+            return true
         } catch {
-            self.error = error.localizedDescription
+            return false
+        }
+    }
+    
+    func formatBalance(_ balance: String) -> String {
+        guard let value = Double(balance) else { return balance }
+        if value.truncatingRemainder(dividingBy: 1) == 0 {
+            return String(Int(value))
+        } else {
+            return String(format: "%.2f", value)
         }
     }
 }

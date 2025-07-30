@@ -2,28 +2,30 @@ import Foundation
 import SwiftUI
 
 struct TransactionsListView: View {
-    let service = TransactionServiceMock()
-    let direction: Direction
-    let availableCategories: [Category]
-
-    @State private var transactions: [Transaction] = []
-    @State private var showHistory = false
-    @State private var showEdit = false
-    @State private var showCreate = false
-    @State private var editingTransaction: Transaction?
     
-    @EnvironmentObject var vm: TransactionsViewModel
-    let mainAccount = Account(
-        id: 6,
-        userId: 7,
-        name: "Основной счёт",
-        balance: 10000,
-        currency: "RUB",
-        createdDate: Date(),
-        updatedDate: Date()
-    )
-    var onSave: ((Transaction) -> Void)?
-    var onDelete: ((Transaction) -> Void)?
+    private let direction: Direction
+    @State private var transactions: [Transaction] = [Transaction]()
+
+    @State private var showHistory: Bool
+    @State private var showCreate: Bool
+    @State private var editingTransaction: Transaction?
+    @State private var showAlert = false
+    
+    @EnvironmentObject var transactionsViewModel: TransactionsViewModel
+    @EnvironmentObject var categoriesViewModel: CategoriesViewModel
+    @EnvironmentObject var accountsViewModel: AccountsViewModel
+    
+    init(
+        direction: Direction,
+        showHistory: Bool = false,
+        showCreate: Bool = false,
+        editingTransaction: Transaction? = nil
+    ) {
+        self.direction = direction
+        self.showHistory = showHistory
+        self.showCreate = showCreate
+        self.editingTransaction = editingTransaction
+    }
     
     private var todayBounds: (start: Date, end: Date) {
             let calendar = Calendar.current
@@ -34,56 +36,63 @@ struct TransactionsListView: View {
         }
 
     var body: some View {
+        
+        if transactionsViewModel.isLoading
+            || accountsViewModel.isLoading
+            || categoriesViewModel.isLoading
+        { ProgressView() }
+        
         NavigationStack {
-            if vm.isLoading {
-                            ProgressView()
-                        }
             ZStack(alignment: .bottomTrailing) {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text(direction == .income ? "Доходы сегодня" : "Расходы сегодня")
-                        .font(.system(size: 34, weight: .bold))
-                        .padding(.horizontal, 15)
-                    
-                    HStack {
-                        Text("Всего")
-                            .font(.system(size: 18))
-                        Spacer()
-                        Text("\(totalAmount, specifier: "%.0f") ₽")
-                            .font(.system(size: 18))
-                    }.frame(height: 13)
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .foregroundColor(Color(.systemBackground))
-                                .shadow(color: Color(.separator).opacity(0.10), radius: 2, x: 0, y: 1)
-                        )
-                        .padding(.horizontal)
+                VStack {
                     List {
-                        Section(header:
-                                    Text("ОПЕРАЦИИ")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        Section(
+                            header: Color.clear.frame(height: 0)
+                        ) {
+                            HStack {
+                                Text("Всего")
+                                    .font(.system(size: 18))
+                                Spacer()
+                                Text("\(totalAmount, specifier: "%.0f") ₽")
+                                    .font(.system(size: 18))
+                            }
+                        }
+                        Section(
+                            header: Text("ОПЕРАЦИИ"),
+                            footer: Color.clear.frame(height: 40)
                         ) {
                             ForEach(transactions) { transaction in
                                 Button {
                                     editingTransaction = transaction
-//                                    showEdit = true
                                 } label: {
                                     HStack {
-                                        Text(transaction.categoryId.name)
+                                        ZStack {
+                                            Circle()
+                                                .fill(Color.accentColor.opacity(0.2))
+                                                .frame(width: 25, height: 25)
+                                            Text(categoriesViewModel.category(id: transaction.category.id)?.emoji ?? "")
+                                                .font(.system(size: 14))
+                                        }
+                                        .padding(.trailing, 8)
+                                        
+                                        Text(categoriesViewModel.category(id: transaction.category.id)?.name ?? "")
                                         Spacer()
-                                        Text("\(NSDecimalNumber(decimal: transaction.amount).doubleValue, specifier: "%.0f") ₽")
+                                        Text("\(Int(transaction.amountDouble)) ₽")
+                                        Image(systemName: "chevron.right")
+                                            .foregroundColor(.secondary)
                                     }
-                                    .padding(.vertical, 6)
+                                    .padding(.vertical, 2)
                                 }
                                 .buttonStyle(.plain)
                             }
                         }
                     }
                     .listStyle(.insetGrouped)
-                    .padding(.top, -15)
-                    .padding(.horizontal, -5)
+                    .listSectionSpacing(5)
+                    .padding(.top, -20)
                 }
+                .background(Color(.systemGroupedBackground))
+                
                 Button(action: {
                     showCreate = true
                 }) {
@@ -98,95 +107,100 @@ struct TransactionsListView: View {
                 }
                 .padding(.trailing, 24)
                 .padding(.bottom, 24)
-                
-                .fullScreenCover(item: $editingTransaction) { transaction in
-                    EditTransactionView(
-                        mode: .edit,
-                        initialTransaction: transaction,
-                        availableCategories: availableCategories,
-                        mainAccount: mainAccount,
-                        onSave: { updated in
-                                    if let i = transactions.firstIndex(where: { $0.id == updated.id }) {
-                                        transactions[i] = updated
-                                    }
-                                    editingTransaction = nil
-                                },
-                                onDelete: { deleted in
-                                    transactions.removeAll(where: { $0.id == deleted.id })
-                                    editingTransaction = nil
-                                }
-                    )
-                }
-
-                .fullScreenCover(isPresented: $showCreate) {
-                    EditTransactionView(
-                        mode: .create,
-                        initialTransaction: nil,
-                        availableCategories: availableCategories,
-                        mainAccount: mainAccount,
-                        onSave: { newTx in
-                                    transactions.append(newTx)
-                                    showCreate = false
-                                }
-                    )
-                }
-                .background(Color(.systemGroupedBackground))
-                
-                
-                .toolbar {
-                    ToolbarItem(placement: .automatic) {
-                        Button {
-                            showHistory = true
-                        } label: {
-                            Image(systemName: "clock")
-                                .tint(.purple)
-                        }
+            }
+            
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button {
+                        showHistory = true
+                    } label: {
+                        Image(systemName: "clock")
+                            .tint(Color("ToolbarButton"))
                     }
                 }
-                .background(
-                    NavigationLink(
-                        destination: HistoryView(direction: direction, isActive: $showHistory),
-                        isActive: $showHistory,
-                        label: { EmptyView() }
-                    )
-                    .hidden()
-                )
-                .onAppear(perform: loadTransactions)
             }
-            .alert(isPresented: Binding(get: { vm.error != nil }, set: { _ in vm.error = nil })) {
-                       Alert(title: Text("Ошибка"), message: Text(vm.error ?? ""), dismissButton: .default(Text("OK")))
-                   }
-                   .task { await vm.loadTransactions() }
+            .navigationTitle(direction == .income ? "Доходы сегодня" : "Расходы сегодня")
+            .background(
+                NavigationLink(
+                    destination: HistoryView(direction: direction, isActive: $showHistory),
+                    isActive: $showHistory,
+                    label: { EmptyView() }
+                )
+                .hidden()
+            )
+        }
+        .fullScreenCover(item: $editingTransaction) { transaction in
+            EditTransactionView(
+                mode: .edit(transaction),
+                direction: direction
+            )
+        }
+
+        .fullScreenCover(isPresented: $showCreate) {
+            EditTransactionView(
+                mode: .create,
+                direction: direction
+            )
+        }
+        .onReceive(transactionsViewModel.$transactions) { _ in
+            updateTransactionsState()
+        }
+        .onReceive(transactionsViewModel.$isLoading) { _ in
+            updateTransactionsState()
+        }
+        .onReceive(categoriesViewModel.$categories) { _ in
+            updateTransactionsState()
+        }
+        .onReceive(accountsViewModel.$errorMessage) { message in
+            if message != nil {
+                showAlert  = true
+            }
+        }
+        .onReceive(transactionsViewModel.$errorMessage) { message in
+            if message != nil {
+                showAlert  = true
+            }
+        }
+        .onReceive(categoriesViewModel.$errorMessage) { message in
+            if message != nil {
+                showAlert  = true
+            }
+        }
+        .alert("Не получилось обновить данные", isPresented: $showAlert) {
+            Button("OK", role: .cancel) { }
         }
     }
     
+    private func updateTransactionsState() {
+        let today = Calendar.current.startOfDay(for: Date())
+        transactions = transactionsViewModel.transactions.filter { transaction in
+            let transactionDay = Calendar.current.startOfDay(for: transaction.transactionDate)
+            return categoriesViewModel.category(id: transaction.category.id)?.direction == direction
+//                && transactionDay == today
+        }
+    }
         
-        private var totalAmount: Double {
-            let sum = transactions.reduce(Decimal(0)) { $0 + $1.amount }
-            return NSDecimalNumber(decimal: sum).doubleValue
+    private var totalAmount: Double {
+        transactions.reduce(0.0) { $0 + $1.amountDouble }
+    }
+    
+    private func loadTransactions() {
+        Task {
+            await transactionsViewModel.fetchUserTransactions()
         }
-        
-        func loadTransactions() {
-            Task {
-                let loaded = await service.getTransactions(
-                    from: todayBounds.start,
-                    to: todayBounds.end,
-                    direction: direction
-                )
-                self.transactions = loaded
-            }
-        }
-}
-
-struct TransactionRow: View {
-    let transaction: Transaction
-    var body: some View {
-        HStack {
-            Text(transaction.categoryId.name)
-            Spacer()
-            Text("\(NSDecimalNumber(decimal: transaction.amount).doubleValue, specifier: "%.2f") ₽")
-        }
-        .font(.body)
-        .padding(.horizontal)
     }
 }
+
+
+//struct TransactionRow: View {
+//    let transaction: Transaction
+//    var body: some View {
+//        HStack {
+//            Text(transaction.category.id.name)
+//            Spacer()
+//            Text("\(NSDecimalNumber(decimal: transaction.amount).doubleValue, specifier: "%.2f") ₽")
+//        }
+//        .font(.body)
+//        .padding(.horizontal)
+//    }
+//}

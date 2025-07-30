@@ -2,44 +2,87 @@ import Foundation
 
 final class TransactionsService {
     private let client: NetworkClient
-//    let storage: TransactionsStorage
-//    let backupStorage: BackupStorage
-    struct EmptyRequest: Encodable {}
+
     init(client: NetworkClient) {
         self.client = client
     }
     
-    func fetchTransactions(for direction: Direction) async throws -> [Transaction] {
+    func fetchAllTransactions(
+        accountId: Int,
+        startDate: Date = Date(timeIntervalSince1970: 0),
+        endDate: Date = Date()
+    ) async throws -> [Transaction] {
         try await client.request(
-            path: "/transactions",
-            method: "GET",
-            requestBody: Optional<EmptyRequest>.none
-        ) as [Transaction]
-    }
-    func addTransaction(_ tx: Transaction) async throws -> Transaction {
-        try await client.request(
-            path: "/transactions",
-            method: "POST",
-            requestBody: tx
+            path: "/transactions/account/\(accountId)/period",
+            method: .get,
+            queryItems: [
+                .init(name: "startDate", value: convertDate(startDate)),
+                .init(name: "endDate", value: convertDate(endDate)),
+            ]
         )
     }
     
-    func updateTransaction(_ tx: Transaction) async throws -> Transaction {
-        try await client.request(
-            path: "/transactions/\(tx.id)",
-            method: "PUT",
-            requestBody: tx
+    func addTransaction(
+        accountId: Int,
+        categoryId: Int,
+        amount: String,
+        transactionDate: Date,
+        comment: String?
+    ) async throws {
+        let _: EmptyResponse = try await client.request(
+            path: "/transactions",
+            method: .post,
+            requestBody: AddOrEditTransactionParams(
+                accountId: accountId,
+                categoryId: categoryId,
+                amount: amount,
+                transactionDate: transactionDate,
+                comment: comment
+            )
         )
     }
-
-    func deleteTransaction(_ tx: Transaction) async throws {
-        _ = try await client.request(
-            path: "/transactions/\(tx.id)",
-            method: "DELETE",
-            requestBody: Optional<EmptyRequest>.none
-        ) as EmptyResponse
+    
+    func editTransaction(
+        transactionId: Int,
+        accountId: Int,
+        categoryId: Int,
+        amount: String,
+        transactionDate: Date,
+        comment: String?
+    ) async throws {
+        let _: EmptyResponse = try await client.request(
+            path: "/transactions/\(transactionId)",
+            method: .put,
+            requestBody: AddOrEditTransactionParams(
+                accountId: accountId,
+                categoryId: categoryId,
+                amount: amount,
+                transactionDate: transactionDate,
+                comment: comment
+            )
+        )
+    }
+    
+    func deleteTransaction(_ transactionId: Int) async throws {
+        let _: EmptyResponse = try await client.request(
+            path: "/transactions/\(transactionId)",
+            method: .delete
+        )
+    }
+    
+    private func convertDate(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        return dateFormatter.string(from: date)
     }
 }
 
-struct EmptyRequest: Encodable {}
-struct EmptyResponse: Decodable {}
+private struct AddOrEditTransactionParams: Encodable {
+    let accountId: Int
+    let categoryId: Int
+    let amount: String
+    let transactionDate: Date
+    let comment: String?
+}
+
+private struct EmptyResponse: Decodable {}
