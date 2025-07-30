@@ -1,3 +1,11 @@
+//
+//  CategoriesViewModel.swift
+//  moneyandtail
+//
+//  Created by Лиза on 05.07.2025.
+//
+
+
 import Foundation
 import SwiftUI
 

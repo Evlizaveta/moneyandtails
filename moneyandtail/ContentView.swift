@@ -8,22 +8,32 @@
 import SwiftUI
 
 struct ContentView: View {
-    let categories: [Category]
+    let categories =
+    MockData.mockCategories
+    
     var body: some View {
         TabView {
-            TransactionsListView(direction: .outcome)
-                .tabItem {
-                    Image(systemName: "chart.bar.xaxis")
-                        .renderingMode(.template)
-                    Text("Расходы")
-                }
             
-            TransactionsListView(direction: .income)
-                .tabItem {
-                    Image(systemName: "chart.bar.xaxis")
-                        .renderingMode(.template)
-                    Text("Доходы")
-                }
+            
+            TransactionsListView(
+                direction: .income,
+                availableCategories: categories.filter { $0.direction == .income }
+            )
+            .tabItem {
+                                Image(systemName: "chart.bar.xaxis")
+                                    .renderingMode(.template)
+                                Text("Доходы")
+                            }
+            
+            TransactionsListView(
+                direction: .outcome,
+                availableCategories: categories.filter { $0.direction == .outcome }
+            )
+            .tabItem {
+                                Image(systemName: "chart.bar.xaxis")
+                                    .renderingMode(.template)
+                                Text("Расходы")
+                            }
             
             AccountScreenView()
                 .tabItem {
@@ -31,11 +41,9 @@ struct ContentView: View {
                         .renderingMode(.template)
                     Text("Счёт")
                 }
-            
-            Text("Статьи")
+            MyArticlesView(categories: categories)
                 .tabItem {
                     Image(systemName: "lineweight")
-                        .renderingMode(.template)
                     Text("Статьи")
                 }
             
@@ -46,14 +54,11 @@ struct ContentView: View {
                     Text("Настройки")
                 }
         }
-        .accentColor(Color("AccentColor"))
+                .accentColor(Color("AccentColor"))
     }
 }
 
 
 #Preview {
-    ContentView(categories: [
-        Category(id: 1, name: "Продукты", emoji: "🍎", direction: .outcome),
-        Category(id: 2, name: "Зарплата", emoji: "💰", direction: .income)
-    ])
+    ContentView()
 }

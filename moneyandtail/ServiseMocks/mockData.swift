@@ -16,31 +16,32 @@ enum MockData {
         createdDate: Date(),
         updatedDate: Date()
     )
-
-    static let mockCategoryGroceries = Category(
+    static let mockCategories: [Category] = [
+        Category(
         id: 2,
         name: "Продукты",
         emoji: "🛒",
         direction: .outcome
-    )
-    static let mockCategorySalary = Category(
+    ),
+    Category(
         id: 3,
         name: "Зарплата",
         emoji: "💼",
         direction: .income
-    )
-    static let mockCategoryCafe = Category(
+    ),
+    Category(
         id: 4,
         name: "Кафе",
         emoji: "☕️",
         direction: .outcome
     )
+        ]
 
     static let mockTransactions: [Transaction] = [
         Transaction(
             id: 5,
             accountId: mockAccount,
-            categoryId: mockCategoryGroceries,
+            categoryId: mockCategories[0],
             amount: 1500,
             transactionDate: Date(),
             comment: "Купили продукты",
@@ -50,7 +51,7 @@ enum MockData {
         Transaction(
             id: 6,
             accountId: mockAccount,
-            categoryId: mockCategorySalary,
+            categoryId: mockCategories[1],
             amount: 50000,
             transactionDate: Date(),
             comment: "Выплата зарплаты",
@@ -60,7 +61,7 @@ enum MockData {
         Transaction(
             id: 7,
             accountId: mockAccount,
-            categoryId: mockCategoryCafe,
+            categoryId: mockCategories[2],
             amount: 450,
             transactionDate: Date(),
             comment: "Кофе с коллегами",
@@ -70,10 +71,40 @@ enum MockData {
         Transaction(
             id: 8,
             accountId: mockAccount,
-            categoryId: mockCategoryGroceries,
+            categoryId: mockCategories[0],
             amount: 1200,
             transactionDate: Date(),
             //transactionDate: Calendar.current.date(byAdding: .day, value: -10, to: Date())!,
+            comment: "Супермаркет",
+            createdDate: Date(),
+            updatedDate: Date()
+        ),
+        Transaction(
+            id: 8,
+            accountId: mockAccount,
+            categoryId: mockCategories[1],
+            amount: 50000,
+            transactionDate: Date(),
+            comment: "Зарплата",
+            createdDate: Date(),
+            updatedDate: Date()
+        ),
+        Transaction(
+            id: 9,
+            accountId: mockAccount,
+            categoryId: mockCategories[2],
+            amount: 450,
+            transactionDate: Date(),
+            comment: "Кофе",
+            createdDate: Date(),
+            updatedDate: Date()
+        ),
+        Transaction(
+            id: 10,
+            accountId: mockAccount,
+            categoryId: mockCategories[0],
+            amount: 1200,
+            transactionDate: Date(),
             comment: "Супермаркет",
             createdDate: Date(),
             updatedDate: Date()
